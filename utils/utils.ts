@@ -13,7 +13,7 @@ export function extractAnswers(text: string) {
     const line = lines[i].trim(); // Remove leading and trailing whitespace
 
     // Check if the line starts with "Answer X:" (where X is a number)
-    const answerMatch = line.match(/^Answer (\d+):/);
+    const answerMatch = line.match(/^Solution (\d+):/);
     if (answerMatch) {
       // If a new answer is found, push the current answer text to the answers array
       if (currentAnswer !== '') {
@@ -37,3 +37,24 @@ export function extractAnswers(text: string) {
 
   return answers;
 }
+
+
+// spellingCorrectionApi.ts
+import axios from 'axios';
+
+export const spellingCorrectionApi = async (text: string) => {
+  try {
+    const response = await axios.post('/api/spell-check',  {
+      text
+    });
+
+    if (response.data) {
+      return response.data;
+    } else {
+      throw new Error('Unable to fetch suggestions');
+    }
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
